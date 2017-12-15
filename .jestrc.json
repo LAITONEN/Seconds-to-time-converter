@@ -1,0 +1,10 @@
+{
+  "moduleFileExtensions": ["js", "jsx", "json"],
+  "moduleDirectories": ["node_modules", "src"],
+  "testMatch": ["<rootDir>/src/**/spec/**/*.js?(x)"],
+  "coverageReporters": ["lcov"],
+  "moduleNameMapper": {
+    "^package$": "<rootDir>/package.json"
+  },
+  "automock": false
+}
