@@ -1,6 +1,17 @@
 /* eslint object-property-newline: 0 */
+
+export const calculate = (currentSecondsLeft, secondsInTimeUnit) => {
+    return Math.floor(currentSecondsLeft / secondsInTimeUnit);
+};
+
+export const toSingular = (value) => {
+  const modifiedArray = [...value.split('')];
+  modifiedArray.pop();
+  return modifiedArray.join('');
+};
+
 export default (input) => {
-  let inputSeconds = input;
+  let inputSeconds = +input;
   const secondsInMinute = 60;
   const secondsInHour = 3600;
   const secondsInDay = 86300;
@@ -8,65 +19,55 @@ export default (input) => {
   const secondsInMonth = 2625000;
   const secondsInYear = 31536000;
   const periods = {
-    years: { number: null, string: 'years' },
-    months: { number: null, string: 'months' },
-    weeks: { number: null, string: 'weeks' },
-    days: { number: null, string: 'days' },
-    hours: { number: null, string: 'hours' },
-    minutes: { number: null, string: 'minutes' },
-    seconds: { number: null, string: 'seconds' },
-  };
-  const calculate = (currentSecondsLeft, secondsInTimeUnit) => {
-      return Math.floor(currentSecondsLeft / secondsInTimeUnit); // should it be this?
-  };
-
-  const toSingular = (value) => {
-    const modifiedArray = [...value.split('')];
-    modifiedArray.pop();
-    return modifiedArray.join('');
+    years: { value: null, string: 'years' },
+    months: { value: null, string: 'months' },
+    weeks: { value: null, string: 'weeks' },
+    days: { value: null, string: 'days' },
+    hours: { value: null, string: 'hours' },
+    minutes: { value: null, string: 'minutes' },
+    seconds: { value: null, string: 'seconds' },
   };
 
   if (inputSeconds >= secondsInYear) {
-    periods.years.number = calculate(inputSeconds, secondsInYear);
-    inputSeconds = inputSeconds - (secondsInYear * periods.years.number);
+    periods.years.value = calculate(inputSeconds, secondsInYear);
+    inputSeconds = inputSeconds - (secondsInYear * periods.years.value);
   }
 
   if (inputSeconds >= secondsInMonth) {
-    periods.months.number = calculate(inputSeconds, secondsInMonth);
-    inputSeconds = inputSeconds - (secondsInMonth * periods.months.number);
+    periods.months.value = calculate(inputSeconds, secondsInMonth);
+    inputSeconds = inputSeconds - (secondsInMonth * periods.months.value);
   }
 
   if (inputSeconds >= secondsInWeek) {
-    periods.weeks.number = calculate(inputSeconds, secondsInWeek);
-    inputSeconds = inputSeconds - (secondsInWeek * periods.weeks.number);
+    periods.weeks.value = calculate(inputSeconds, secondsInWeek);
+    inputSeconds = inputSeconds - (secondsInWeek * periods.weeks.value);
   }
 
   if (inputSeconds >= secondsInDay) {
-    periods.days.number = calculate(inputSeconds, secondsInDay);
-    inputSeconds = inputSeconds - (secondsInDay * periods.days.number);
+    periods.days.value = calculate(inputSeconds, secondsInDay);
+    inputSeconds = inputSeconds - (secondsInDay * periods.days.value);
   }
 
   if (inputSeconds >= secondsInHour) {
-    periods.hours.number = calculate(inputSeconds, secondsInHour);
-    inputSeconds = inputSeconds - (secondsInHour * periods.hours.number);
+    periods.hours.value = calculate(inputSeconds, secondsInHour);
+    inputSeconds = inputSeconds - (secondsInHour * periods.hours.value);
   }
 
   if (inputSeconds >= secondsInMinute) {
-    periods.minutes.number = calculate(inputSeconds, secondsInMinute);
-    inputSeconds = inputSeconds - (secondsInMinute * periods.minutes.number);
+    periods.minutes.value = calculate(inputSeconds, secondsInMinute);
+    inputSeconds = inputSeconds - (secondsInMinute * periods.minutes.value);
   }
 
   if (inputSeconds !== 0) {
-    periods.seconds.number = calculate(inputSeconds, secondsInMonth);
+    periods.seconds.value = calculate(inputSeconds, secondsInMonth);
     inputSeconds = inputSeconds - secondsInMonth;
   }
 
   let output = [];
-  //'DOES NOT RUN'
   Object.values(periods).forEach(timeUnitObject => {
-    if (timeUnitObject.number) {
-      const timeUnitString = `${timeUnitObject.number} ${timeUnitObject.string}`;
-      const timeUnitOutput = timeUnitObject.number == 1 ? toSingular(timeUnitString) : timeUnitString;
+    if (timeUnitObject.value) {
+      const timeUnitString = `${timeUnitObject.value} ${timeUnitObject.string}`;
+      const timeUnitOutput = timeUnitObject.value == 1 ? toSingular(timeUnitString) : timeUnitString;
       output.push(timeUnitOutput);
     }
   });
