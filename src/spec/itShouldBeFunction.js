@@ -2,8 +2,9 @@
 no-tabs: 0,
 no-console: 0
 */
-import convert, { calculate, subtractUsedSeconds } from '../index';
+import convert, { divideToInteger, doTheMath, subtractUsedSeconds } from '../index';
 
+const output = { counts: [], results: [] };
 test('convert method should be a function', () => {
   expect(typeof convert).toBe('function');
 });
@@ -12,16 +13,16 @@ test('convert method should return a string', () => {
   expect(typeof convert(123)).toEqual('string');
 });
 
-test('calculate function should return a number', () => {
-	expect(typeof calculate(1, 2)).toEqual('number');
+test('divideToInteger function should return a string', () => {
+	expect(typeof divideToInteger(1, 2, output)).toEqual('string');
 });
 
-test('calculate function should calculate the time unit', () => {
-	expect(calculate(1, 2)).toEqual(Math.floor(1 / 2));
-});
-
-test('subtractUsedSeconds should subtract seconds correctly', () => {
+test('subtractUsedSeconds function should subtract seconds correctly', () => {
 	expect(subtractUsedSeconds(105, 2)).toEqual(103);
+});
+
+test('doTheMath function should calculate correctly', () => {
+	expect(doTheMath(7204, 'hour', output)).toEqual(4);
 });
 
 test('It should parse 1 correctly', () => {
