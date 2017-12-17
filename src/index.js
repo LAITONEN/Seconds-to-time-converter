@@ -4,70 +4,77 @@ export const calculate = (currentSecondsLeft, secondsInTimeUnit) => {
     return Math.floor(currentSecondsLeft / secondsInTimeUnit);
 };
 
-export const toSingular = (value) => {
-  const modifiedArray = [...value.split('')];
-  modifiedArray.pop();
-  return modifiedArray.join('');
+export const subtractUsedSeconds = (secondsBefore, secondsUsed) => {
+    return secondsBefore - secondsUsed;
 };
 
+// move everything from if statements to a separate function?
+
 export default (input) => {
-  let inputSeconds = +input;
+  let remainingSeconds = +input;
   const secondsInMinute = 60;
   const secondsInHour = 3600;
-  const secondsInDay = 86300;
-  const secondsInWeek = 604110;
-  const secondsInMonth = 2625000;
+  const secondsInDay = 86400;
+  const secondsInWeek = 604800;
+  const secondsInMonth = 2592000;
   const secondsInYear = 31536000;
   const periods = {
-    years: { value: null, string: 'years' },
-    months: { value: null, string: 'months' },
-    weeks: { value: null, string: 'weeks' },
-    days: { value: null, string: 'days' },
-    hours: { value: null, string: 'hours' },
-    minutes: { value: null, string: 'minutes' },
-    seconds: { value: null, string: 'seconds' },
+    years: { value: null, string: 'year' },
+    months: { value: null, string: 'month' },
+    weeks: { value: null, string: 'week' },
+    days: { value: null, string: 'day' },
+    hours: { value: null, string: 'hour' },
+    minutes: { value: null, string: 'minute' },
+    seconds: { value: null, string: 'second' },
   };
 
-  if (inputSeconds >= secondsInYear) {
-    periods.years.value = calculate(inputSeconds, secondsInYear);
-    inputSeconds = inputSeconds - (secondsInYear * periods.years.value);
+  if (remainingSeconds >= secondsInYear) {
+    periods.years.value = calculate(remainingSeconds, secondsInYear);
+    const justUsedSeconds = secondsInYear * periods.years.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds, justUsedSeconds);
   }
 
-  if (inputSeconds >= secondsInMonth) {
-    periods.months.value = calculate(inputSeconds, secondsInMonth);
-    inputSeconds = inputSeconds - (secondsInMonth * periods.months.value);
+  if (remainingSeconds >= secondsInMonth) {
+    periods.months.value = calculate(remainingSeconds, secondsInMonth);
+    const justUsedSeconds = secondsInMonth * periods.months.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds, justUsedSeconds);
   }
 
-  if (inputSeconds >= secondsInWeek) {
-    periods.weeks.value = calculate(inputSeconds, secondsInWeek);
-    inputSeconds = inputSeconds - (secondsInWeek * periods.weeks.value);
+  if (remainingSeconds >= secondsInWeek) {
+    periods.weeks.value = calculate(remainingSeconds, secondsInWeek);
+    const justUsedSeconds = secondsInWeek * periods.weeks.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds, justUsedSeconds);
   }
 
-  if (inputSeconds >= secondsInDay) {
-    periods.days.value = calculate(inputSeconds, secondsInDay);
-    inputSeconds = inputSeconds - (secondsInDay * periods.days.value);
+  if (remainingSeconds >= secondsInDay) {
+    periods.days.value = calculate(remainingSeconds, secondsInDay);
+    const justUsedSeconds = secondsInDay * periods.days.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds, justUsedSeconds);
   }
 
-  if (inputSeconds >= secondsInHour) {
-    periods.hours.value = calculate(inputSeconds, secondsInHour);
-    inputSeconds = inputSeconds - (secondsInHour * periods.hours.value);
+  if (remainingSeconds >= secondsInHour) {
+    periods.hours.value = calculate(remainingSeconds, secondsInHour);
+    const justUsedSeconds = secondsInHour * periods.hours.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds, justUsedSeconds);
+  }
+  // periods.minutes.value, remainingSeconds, secondsInMinute
+  if (remainingSeconds >= secondsInMinute) {
+    periods.minutes.value = calculate(remainingSeconds, secondsInMinute);
+    const justUsedSeconds = secondsInMinute * periods.minutes.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds, justUsedSeconds);
   }
 
-  if (inputSeconds >= secondsInMinute) {
-    periods.minutes.value = calculate(inputSeconds, secondsInMinute);
-    inputSeconds = inputSeconds - (secondsInMinute * periods.minutes.value);
-  }
-
-  if (inputSeconds !== 0) {
-    periods.seconds.value = calculate(inputSeconds, secondsInMonth);
-    inputSeconds = inputSeconds - secondsInMonth;
+  if (remainingSeconds !== 0) {
+    periods.seconds.value = remainingSeconds;
+    const justUsedSeconds = periods.seconds.value;
+    remainingSeconds = subtractUsedSeconds(remainingSeconds - justUsedSeconds);
   }
 
   let output = [];
   Object.values(periods).forEach(timeUnitObject => {
     if (timeUnitObject.value) {
       const timeUnitString = `${timeUnitObject.value} ${timeUnitObject.string}`;
-      const timeUnitOutput = timeUnitObject.value == 1 ? toSingular(timeUnitString) : timeUnitString;
+      const timeUnitOutput = timeUnitObject.value != 1 ? `${timeUnitString}s` : timeUnitString;
       output.push(timeUnitOutput);
     }
   });
