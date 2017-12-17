@@ -5,6 +5,8 @@ no-console: 0
 import convert, { divideToInteger, doTheMath, subtractUsedSeconds } from '../index';
 
 const output = { counts: [], results: [] };
+const hour = { inSeconds: 3600, name: 'hour' };
+
 test('convert method should be a function', () => {
   expect(typeof convert).toBe('function');
 });
@@ -22,7 +24,7 @@ test('subtractUsedSeconds function should subtract seconds correctly', () => {
 });
 
 test('doTheMath function should calculate correctly', () => {
-	expect(doTheMath(7204, 'hour', output)).toEqual(4);
+	expect(doTheMath(7204, hour, output)).toEqual(4);
 });
 
 test('It should parse 1 correctly', () => {
